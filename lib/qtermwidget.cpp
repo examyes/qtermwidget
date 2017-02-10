@@ -246,6 +246,15 @@ void QTermWidget::init(int startnow)
     m_layout->setMargin(0);
     setLayout(m_layout);
 
+#ifdef TRANSLATIONS_DIR
+    // translations
+    QString fname = QString("qtermwidget_%1.qm").arg(QLocale::system().name().left(5));
+    m_translator = new QTranslator(this);
+    qDebug() << "TRANSLATIONS_DIR: Loading translation file" << fname << "from dir" << TRANSLATIONS_DIR;
+    qDebug() << "load success:" << m_translator->load(fname, TRANSLATIONS_DIR, "_");
+    qApp->installTranslator(m_translator);
+#endif
+
     m_impl = new TermWidgetImpl(this);
     m_impl->m_terminalDisplay->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_layout->addWidget(m_impl->m_terminalDisplay);
